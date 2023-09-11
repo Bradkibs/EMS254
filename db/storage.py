@@ -1,9 +1,10 @@
-from sqlalchemy import create_engine, MetaData
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.orm import scoped_session
+from models.basemodel import Base
+from sqlalchemy import create_engine
+from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy.exc import SQLAlchemyError
 from os import getenv
 from dotenv import load_dotenv
-from models.user import Base
 
 
 load_dotenv()
@@ -70,3 +71,7 @@ class DB:
 
         if obj:
             self.__session.delete(obj)
+
+    def close(self):
+        """calls remove() method on the private session attr to close the session and stop using it"""
+        self.__session.remove()
