@@ -2,9 +2,9 @@
 """
 Flask App sends and accept json api requests to the set frontend
 """
+from datetime import timedelta
 
-
-from flask import Flask, jsonify, make_response
+from flask import Flask, jsonify, make_response, request
 from flask_cors import CORS, cross_origin
 import os
 from db import storage
@@ -16,6 +16,9 @@ load_dotenv()
 
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(minutes=30)  # Set the token expiration time
 
 app.url_map.strict_slashes = False
 
@@ -30,7 +33,11 @@ cors = CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 def home():
     return jsonify("Hello world"), 200
 
-# begin flask page rendering
+
+@app.before_request
+def check_content_type():
+    if request.method in ["POST", "PUT", "PATCH"] and request.headers["Content-Type"] != "application/json":
+        return jsonify({"message": "Content-Type must be application/json"}), 400
 @app.teardown_appcontext
 def teardown_db(exception):
     """
