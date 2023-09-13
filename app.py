@@ -10,6 +10,10 @@ import os
 from db import storage
 from werkzeug.exceptions import HTTPException
 from dotenv import load_dotenv
+from flask_jwt_extended import JWTManager, jwt_required
+from auth.auth import Authentication
+
+Auth = Authentication()
 
 
 load_dotenv()
@@ -17,8 +21,11 @@ load_dotenv()
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+
+jwt = JWTManager(app)
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
-app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(minutes=30)  # Set the token expiration time
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(minutes=30)
+
 
 app.url_map.strict_slashes = False
 
@@ -29,9 +36,11 @@ cors = CORS(app, origins="0.0.0.0")
 cors = CORS(app, resources={r'/*': {'origins': host}})
 cors = CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 
+@jwt_required()
 @app.route("/")
 def home():
-    return jsonify("Hello world"), 200
+    access_token = Auth.create_token("Hello world")
+    return jsonify({"access token": access_token}), 200
 
 
 @app.before_request
