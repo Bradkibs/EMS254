@@ -12,6 +12,10 @@ from werkzeug.exceptions import HTTPException
 from dotenv import load_dotenv
 from flask_jwt_extended import JWTManager, jwt_required
 from auth.auth import Authentication
+from flask import Blueprint
+
+app_views = Blueprint('app_views', __name__, url_prefix='/api/v1/views/')
+
 
 Auth = Authentication()
 
@@ -47,6 +51,7 @@ def home():
 def check_content_type():
     if request.method in ["POST", "PUT", "PATCH"] and request.headers["Content-Type"] != "application/json":
         return jsonify({"message": "Content-Type must be application/json"}), 400
+
 @app.teardown_appcontext
 def teardown_db(exception):
     """
