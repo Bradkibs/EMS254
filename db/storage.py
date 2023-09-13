@@ -28,9 +28,10 @@ class DB:
         host = getenv('MYSQL_HOST')
         db_name = getenv('MYSQL_DB')
         env = getenv('APP_ENV')
-
+        pg_url = getenv('PG_URL')
         try:
-            self.__engine = create_engine(f'mysql+mysqldb://{user}:{password}@{host}/{db_name}')
+            #self.__engine = create_engine(f'mysql+mysqldb://{user}:{password}@{host}/{db_name}')
+            self.__engine = create_engine(pg_url)
             self.reload()
 
             if env == 'test':

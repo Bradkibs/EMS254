@@ -1,5 +1,5 @@
 from app import app_views
-from flask import jsonify, abort, request
+from flask import jsonify, request
 from auth.auth import Authentication
 from auth.user import UserAuth
 from datetime import datetime
@@ -38,4 +38,3 @@ def register_user():
     user = user_auth.create_user(email=email, password=password, first_name=first_name, last_name=last_name, phone_number=phone_number, location=location, is_superuser=is_superuser, is_active=is_active, last_login=last_login)
     return jsonify({"message": "user created successfully"}), 201
 
-@app_views.route('/users', methods=['GET'], strict_slashes=False)

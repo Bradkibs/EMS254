@@ -12,18 +12,18 @@ services:
     volumes:
       - .:/escrow-app-backend
     depends_on:
-      - mysql
+      - postgres
     env_file:
       - .env
 
-  mysql:
-    image: mysql
+  postgres:
+    image: postgres
     ports:
-      - "3306:3306"
+      - "5432:5432"
     volumes:
       - .:/db_volume
     environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASS}
-      - MYSQL_USER=${MYSQL_USER}
-      - MYSQL_PASSWORD=${MYSQL_PWD}
-      - MYSQL_DATABASE=${MYSQL_DB}
+      - POSTGRES_ROOT_PASSWORD=${PG_ROOT_PASS}
+      - POSTGRES_USER=${PG_USER}
+      - POSTGRES_PASSWORD=${PG_PWD}
+      - POSTGRES_DATABASE=${PG_DB}
