@@ -33,6 +33,8 @@ app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(minutes=30)
 
 app.url_map.strict_slashes = False
 
+app.register_blueprint(app_views)
+
 host = os.getenv("APP_HOST", "0.0.0.0")
 port = os.getenv("APP_PORT", 5000)
 
@@ -49,7 +51,7 @@ def home():
 
 @app.before_request
 def check_content_type():
-    if request.method in ["POST", "PUT", "PATCH"] and request.headers["Content-Type"] != "application/json":
+    if request.method in ["POST", "PUT", "PATCH", "DELETE"] and request.headers["Content-Type"] != "application/json":
         return jsonify({"message": "Content-Type must be application/json"}), 400
 
 @app.teardown_appcontext

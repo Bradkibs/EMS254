@@ -3,7 +3,6 @@ from flask import jsonify, request
 from auth.auth import Authentication
 from auth.user import UserAuth
 from datetime import datetime
-from flask_jwt_extended import jwt_required, get_jwt_identity
 
 user_auth = UserAuth()
 user_authenticator = Authentication()
@@ -35,6 +34,6 @@ def register_user():
     is_active = True
     is_superuser = False
     last_login = datetime.utcnow()
-    user = user_auth.create_user(email=email, password=password, first_name=first_name, last_name=last_name, phone_number=phone_number, location=location, is_superuser=is_superuser, is_active=is_active, last_login=last_login)
+    user_auth.create_user(email=email, password=password, first_name=first_name, last_name=last_name, phone_number=phone_number, location=location, is_superuser=is_superuser, is_active=is_active, last_login=last_login)
     return jsonify({"message": "user created successfully"}), 201
 
