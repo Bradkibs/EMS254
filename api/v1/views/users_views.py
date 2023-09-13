@@ -1,8 +1,10 @@
-from app import app_views
 from flask import jsonify, request
 from auth.auth import Authentication
-from auth.user import UserAuth
+from auth.user_auth import UserAuth
 from datetime import datetime
+from flask import Blueprint
+
+app_views = Blueprint('app_views', __name__, url_prefix='/api/v1/views/')
 
 user_auth = UserAuth()
 user_authenticator = Authentication()
@@ -12,12 +14,13 @@ def register_user():
     """
     Register a new user
     """
-    email = request.form.get('email')
-    password = request.form.get('password')
-    first_name = request.form.get('first_name')
-    last_name = request.form.get('last_name')
-    phone_number = request.form.get('phone_number')
-    location = request.form.get('location')
+    data = request.get_json()
+    email = data.get('email')
+    password = data.get('password')
+    first_name = data.get('first_name')
+    last_name = data.get('last_name')
+    phone_number = data.get('phone_number')
+    location = data.get('location')
 
     if not email:
         return jsonify({"message": "email is required"}), 400

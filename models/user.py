@@ -1,8 +1,8 @@
-from models.basemodel import BaseModel
+from models.basemodel import BaseModel, Base
 from sqlalchemy import Column, String, DateTime, Boolean
 
 
-class User(BaseModel):
+class User(BaseModel, Base):
     __tablename__ = 'users'
 
     first_name = Column(String(80), nullable=False)
@@ -14,3 +14,6 @@ class User(BaseModel):
     is_active = Column(Boolean, default=False)
     last_login = Column(DateTime, nullable=False)
 
+    def __init__(self, *args, **kwargs):
+        """Initialize the user"""
+        super().__init__(*args, **kwargs)

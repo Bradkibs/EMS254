@@ -12,9 +12,8 @@ from werkzeug.exceptions import HTTPException
 from dotenv import load_dotenv
 from flask_jwt_extended import JWTManager, jwt_required
 from auth.auth import Authentication
-from flask import Blueprint
+from api.v1.views.users_views import app_views
 
-app_views = Blueprint('app_views', __name__, url_prefix='/api/v1/views/')
 
 
 Auth = Authentication()
@@ -93,10 +92,10 @@ def global_error_handler(err):
     if isinstance(err, HTTPException):
         if type(err).__name__ == 'NotFound':
             err.description = "Not found"
-        message = {'error': err.description}
+        message = {'error': str(err)}
         code = err.code
     else:
-        message = {'error': err}
+        message = {'error': str(err)}
         code = 500
     return make_response(jsonify(message), code)
 

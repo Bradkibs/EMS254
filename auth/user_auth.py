@@ -1,7 +1,7 @@
 from models.users import User
 from uuid import uuid4
 from db import storage
-from bycrypt import hashpw, gensalt, checkpw
+from bcrypt import hashpw, gensalt, checkpw
 
 class UserAuth:
     _db = storage
@@ -9,7 +9,8 @@ class UserAuth:
 
 
     def hash_password(self, password):
-        return hashpw(password, gensalt())
+        password_bytes = password.encode('utf-8')
+        return hashpw(password_bytes, gensalt())
 
     def verify_password(self, password, hashed_password):
         return checkpw(password, hashed_password)
