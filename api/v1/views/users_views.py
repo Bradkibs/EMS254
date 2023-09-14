@@ -3,6 +3,7 @@ from auth.auth import Authentication
 from auth.user_auth import UserAuth
 from datetime import datetime
 from flask import Blueprint
+from flask_jwt_extended import jwt_required
 
 app_views = Blueprint('app_views', __name__, url_prefix='/api/v1/views/')
 
@@ -52,7 +53,6 @@ def register_user():
         usr = user_auth.create_user(email=email, password=password, first_name=first_name, last_name=last_name, phone_number=phone_number, location=location, is_superuser=is_superuser, is_active=is_active, last_login=last_login_str)
         return jsonify({"message": "user created successfully", "user_id": str(usr.id) }), 201
 
-
 @app_views.route('/login', methods=['POST'])
 def login_user():
     """
@@ -90,23 +90,25 @@ def login_user():
             user_authenticator.set_cookie(response, access_token)
             return response
 
+@jwt_required()
+@app_views.route('/users/<string:user_id>', methods=['GET'])
+def get_user(user_id):
+    """
+    Get a user
+    """
+    user_id  = user_authenticator.get_authenticated_user()
+    return user_id
+    user = user_auth.get_user_by_id(user_id)
+    if not user:
+        return jsonify({"message": "user not found"}), 404
+    user_data = {
+        "first_name": user.first_name,
+        "last_name": user.last_name,
+        "phone_number": user.phone_number,
+        "location": user.location,
+        "is_superuser": user.is_superuser,
+        "is_active": user.is_active,
+        "last_login": user.last_login
 
-# @app_views.route('/users/<string:user_id>', methods=['GET'])
-# def get_user(user_id):
-#     """
-#     Get a user
-#     """
-#     user = user_auth.get_user_by_id(user_id)
-#     if not user:
-#         return jsonify({"message": "user not found"}), 404
-#     user_data = {
-#         "first_name": user.first_name,
-#         "last_name": user.last_name,
-#         "phone_number": user.phone_number,
-#         "location": user.location,
-#         "is_superuser": user.is_superuser,
-#         "is_active": user.is_active,
-#         "last_login": user.last_login
-
-#     }
-#     return jsonify(user_data), 200
+    }
+    return jsonify(user_data), 200
