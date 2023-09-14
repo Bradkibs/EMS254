@@ -27,6 +27,7 @@ class UserAuth:
         login_time = kwargs.get('last_login')
         password = self.hash_password(password)
         user = User(email=email, password=password, first_name=first_name, last_name=last_name, phone_number=phone_number, location=location, is_superuser=is_superuser, is_active=is_active, last_login=login_time)
+        storage.reload()
         self._db.add(user)
         self._db.save()
         return user

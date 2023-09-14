@@ -37,6 +37,7 @@ def register_user():
     is_active = False
     is_superuser = False
     last_login = datetime.utcnow()
-    user_auth.create_user(email=email, password=password, first_name=first_name, last_name=last_name, phone_number=phone_number, location=location, is_superuser=is_superuser, is_active=is_active, last_login=last_login)
+    last_login_str = last_login.strftime("%Y-%m-%d %H:%M:%S")
+    user_auth.create_user(email=email, password=password, first_name=first_name, last_name=last_name, phone_number=phone_number, location=location, is_superuser=is_superuser, is_active=is_active, last_login=last_login_str)
     return jsonify({"message": "user created successfully"}), 201
 
