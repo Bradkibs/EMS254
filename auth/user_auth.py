@@ -32,18 +32,22 @@ class UserAuth:
 
     def get_user_by_email(self, email):
         try:
-            return self._db.query.filter_by(email=email).first()
+            return self._db.query(User).filter_by(email=email).first()
         except Exception as e:
             return None
-
+    def get_user_by_phone_number(self, phone_number):
+        try:
+            return self._db.query(User).filter_by(phone_number=phone_number).first()
+        except Exception as e:
+            return None
     def get_user_by_id(self, id):
         try:
-            return self._db.query.filter_by(id=id).first()
+            return self._db.query(User).filter_by(id=id).first()
         except Exception as e:
             return None
 
     def get_all_users(self):
-        return self._db.query.all()
+        return self._db.query(User).all()
 
     def delete_user(self, id):
         user = self.get_user_by_id(id)
