@@ -34,7 +34,7 @@ def register_user():
         return jsonify({"message": "phone_number is required"}), 400
     if not location:
         return jsonify({"message": "location is required"}), 400
-    is_active = True
+    is_active = False
     is_superuser = False
     last_login = datetime.utcnow()
     user_auth.create_user(email=email, password=password, first_name=first_name, last_name=last_name, phone_number=phone_number, location=location, is_superuser=is_superuser, is_active=is_active, last_login=last_login)
