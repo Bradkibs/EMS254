@@ -73,6 +73,13 @@ class DB:
         if obj:
             self.__session.delete(obj)
 
+    def query(self, cls):
+        """
+        Query
+        """
+
+        return self.__session.query(cls)
+
     def close(self):
         """calls remove() method on the private session attr to close the session and stop using it"""
         self.__session.remove()

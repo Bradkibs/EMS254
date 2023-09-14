@@ -1,12 +1,11 @@
 from models.users import User
 from uuid import uuid4
-from db import storage
+from db.storage import DB
 from bcrypt import hashpw, gensalt, checkpw
 
 class UserAuth:
-    _db = storage
-
-
+    _db = DB()
+    _db.reload()
 
     def hash_password(self, password):
         password_bytes = password.encode('utf-8')
@@ -27,7 +26,6 @@ class UserAuth:
         login_time = kwargs.get('last_login')
         password = self.hash_password(password)
         user = User(email=email, password=password, first_name=first_name, last_name=last_name, phone_number=phone_number, location=location, is_superuser=is_superuser, is_active=is_active, last_login=login_time)
-        storage.reload()
         self._db.add(user)
         self._db.save()
         return user
