@@ -9,10 +9,14 @@ class UserAuth:
 
     def hash_password(self, password):
         password_bytes = password.encode('utf-8')
-        return hashpw(password_bytes, gensalt())
+        salt = gensalt()
+        hashed_password = hashpw(password_bytes, salt)
+        return hashed_password.decode('utf-8')
 
-    def verify_password(self, password, hashed_password):
-        return checkpw(password, hashed_password)
+    def verify_password(self, candidate_password, hashed_password):
+        candidate_password_bytes = candidate_password.encode('utf-8')
+        hashed_password_bytes = hashed_password.encode('utf-8')
+        return checkpw(candidate_password_bytes, hashed_password_bytes)
 
     def create_user(self, **kwargs):
         email = kwargs.get('email')

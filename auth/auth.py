@@ -25,7 +25,7 @@ class Authentication:
         return None
 
     def set_cookie(self, response, access_token):
-        set_access_cookies(response)
+        set_access_cookies(response, access_token)
 
-    def unset_cookie(self, response):
-        unset_jwt_cookies(response)
+    def unset_cookie(self, response, access_token):
+        unset_jwt_cookies(response, access_token)
