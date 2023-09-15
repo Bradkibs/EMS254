@@ -3,8 +3,8 @@ from auth.auth import Authentication
 from auth.user_auth import UserAuth
 from datetime import datetime
 from api.v1.views import app_views
-from auth.verify_user import generate_verification_token, send_verification_email
-from flask_jwt_extended import jwt_required, get_jwt_identity
+#from auth.verify_user import generate_verification_token, send_verification_email
+from flask_jwt_extended import jwt_required
 
 user_auth = UserAuth()
 user_authenticator = Authentication()
@@ -57,7 +57,6 @@ def login_user():
     Login a user
     """
     data = request.get_json()
-    return data
     email = data.get('email')
     phone_number = data.get('phone_number')
     password = data.get('password')
@@ -90,14 +89,13 @@ def login_user():
             return response
 
 
-@jwt_required()
 @app_views.route('/profile', methods=['GET'])
+@jwt_required()
 def get_user():
     """
     Get a user
     """
-    user_id = get_jwt_identity()
-    return jsonify(user_id), 201
+    user_id = user_authenticator.get_authenticated_user()
     user = user_auth.get_user_by_id(user_id)
     if not user:
         return jsonify({"message": "user not found"}), 404

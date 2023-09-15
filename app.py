@@ -46,6 +46,12 @@ app.register_blueprint(app_views)
 
 host = os.getenv("APP_HOST", "0.0.0.0")
 port = os.getenv("APP_PORT", 5000)
+environ = os.getenv("APP_ENV")
+
+if environ == 'development':
+    app.debug = True
+else:
+    app.debug = False
 
 cors = CORS(app, origins="0.0.0.0")
 cors = CORS(app, resources={r'/*': {'origins': host}})
@@ -138,4 +144,4 @@ if __name__ == "__main__":
     # initializes global error handling
     setup_global_errors()
     # start Flask app
-    app.run(host=host, port=port, debug=True)
+    app.run(host=host, port=port)
