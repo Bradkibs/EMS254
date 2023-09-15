@@ -11,19 +11,19 @@ services:
       - "5000:5000"
     volumes:
       - .:/escrow-app-backend
-    depends_on:
-      - postgres
+#    depends_on:
+#      - postgres
     env_file:
       - .env
 
-  postgres:
-    image: postgres
-    ports:
-      - "5432:5432"
-    volumes:
-      - .:/db_volume
-    environment:
-      - POSTGRES_ROOT_PASSWORD=${PG_ROOT_PASS}
-      - POSTGRES_USER=${PG_USER}
-      - POSTGRES_PASSWORD=${PG_PWD}
-      - POSTGRES_DATABASE=${PG_DB}
+#  postgres:
+#    image: postgres
+#    ports:
+#      - "5432:5432"
+#    volumes:
+#      - .:/db_volume
+#    environment:
+#      - POSTGRES_ROOT_PASSWORD=${PG_ROOT_PASS}
+#      - POSTGRES_USER=${PG_USER}
+#      - POSTGRES_PASSWORD=${PG_PWD}
+#      - POSTGRES_DATABASE=${PG_DB}

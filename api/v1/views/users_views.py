@@ -2,10 +2,9 @@ from flask import jsonify, request
 from auth.auth import Authentication
 from auth.user_auth import UserAuth
 from datetime import datetime
-from flask import Blueprint
-from flask_jwt_extended import jwt_required
-
-app_views = Blueprint('app_views', __name__, url_prefix='/api/v1/views/')
+from api.v1.views import app_views
+from auth.verify_user import generate_verification_token, send_verification_email
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 user_auth = UserAuth()
 user_authenticator = Authentication()
@@ -36,22 +35,21 @@ def register_user():
     if not location:
         return jsonify({"message": "location is required"}), 400
     is_active = False
-    is_superuser = False
     last_login = datetime.utcnow()
     last_login_str = last_login.strftime("%Y-%m-%d %H:%M:%S")
     user = user_auth.get_user_by_email(email)
-    # user_data = {
-    #     "email": user.email,
-    #     "password": user.password,
-    #     "first_name": user.first_name,
-    # }
-
-    # return jsonify(user_data), 200
     if user:
         return jsonify({"message": "user already exists"}), 409
     else:
-        usr = user_auth.create_user(email=email, password=password, first_name=first_name, last_name=last_name, phone_number=phone_number, location=location, is_superuser=is_superuser, is_active=is_active, last_login=last_login_str)
-        return jsonify({"message": "user created successfully", "user_id": str(usr.id) }), 201
+        usr = user_auth.create_user(email=email, password=password, first_name=first_name, last_name=last_name, phone_number=phone_number, location=location, is_active=is_active, last_login=last_login_str)
+        #verification_token = generate_verification_token()
+        #mail_response = send_verification_email(user_email=email, verification_token=verification_token)
+
+        return jsonify({"message": "user created successfully", "user_id": str(usr.id)}), 201
+
+
+#@app_views.route('/verify_email/<string: token>', methods=['GET'])
+#def verify_email(token):
 
 @app_views.route('/login', methods=['POST'])
 def login_user():
@@ -59,6 +57,7 @@ def login_user():
     Login a user
     """
     data = request.get_json()
+    return data
     email = data.get('email')
     phone_number = data.get('phone_number')
     password = data.get('password')
@@ -75,7 +74,7 @@ def login_user():
             return jsonify({"message": "invalid password"}), 400
         else:
             access_token = user_authenticator.create_token(user.id)
-            response = jsonify({"message":"Logged in successfully!", 'status': 200})
+            response = jsonify({"message": "Logged in successfully!", 'status': 200})
             user_authenticator.set_cookie(response, access_token)
             return response
     if phone_number:
@@ -86,29 +85,37 @@ def login_user():
             return jsonify({"message": "invalid password"}), 400
         else:
             access_token = user_authenticator.create_token(user.id)
-            response = jsonify({"message":"Logged in successfully!", 'status': 200})
+            response = jsonify({"message": "Logged in successfully!", "status": 200})
             user_authenticator.set_cookie(response, access_token)
             return response
 
+
 @jwt_required()
-@app_views.route('/users/<string:user_id>', methods=['GET'])
-def get_user(user_id):
+@app_views.route('/profile', methods=['GET'])
+def get_user():
     """
     Get a user
     """
-    user_id  = user_authenticator.get_authenticated_user()
-    return user_id
+    user_id = get_jwt_identity()
+    return jsonify(user_id), 201
     user = user_auth.get_user_by_id(user_id)
     if not user:
         return jsonify({"message": "user not found"}), 404
     user_data = {
+        "email": user.email,
         "first_name": user.first_name,
         "last_name": user.last_name,
         "phone_number": user.phone_number,
         "location": user.location,
-        "is_superuser": user.is_superuser,
+        "role": user.role,
         "is_active": user.is_active,
         "last_login": user.last_login
 
     }
     return jsonify(user_data), 200
+
+
+@app_views.route('/logout', methods=['GET'])
+def logout():
+    pass
+

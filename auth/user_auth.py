@@ -25,11 +25,11 @@ class UserAuth:
         last_name = kwargs.get('last_name')
         phone_number = kwargs.get('phone_number')
         location = kwargs.get('location')
-        is_superuser = kwargs.get('is_superuser')
+        role = kwargs.get('is_superuser')
         is_active = kwargs.get('is_active')
         login_time = kwargs.get('last_login')
         password = self.hash_password(password)
-        user = User(email=email, password=password, first_name=first_name, last_name=last_name, phone_number=phone_number, location=location, is_superuser=is_superuser, is_active=is_active, last_login=login_time)
+        user = User(email=email, password=password, first_name=first_name, last_name=last_name, phone_number=phone_number, location=location, role=role, is_active=is_active, last_login=login_time)
         self._db.add(user)
         self._db.save()
         return user

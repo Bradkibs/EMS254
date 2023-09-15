@@ -4,15 +4,15 @@ Flask App sends and accept json api requests to the set frontend
 """
 from datetime import timedelta
 
-from flask import Flask, jsonify, make_response, request
+from flask import Flask, jsonify, make_response, request, redirect
 from flask_cors import CORS, cross_origin
 import os
 from db import storage
 from werkzeug.exceptions import HTTPException
 from dotenv import load_dotenv
-from flask_jwt_extended import JWTManager, jwt_required
+from flask_jwt_extended import JWTManager
 from auth.auth import Authentication
-from api.v1.views.users_views import app_views
+from api.v1.views import app_views
 
 
 
@@ -25,9 +25,19 @@ load_dotenv()
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
+# JWT config
 jwt = JWTManager(app)
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(minutes=30)
+
+# Mail server config
+# app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER')
+# app.config['MAIL_PORT'] = os.getenv('MAIL_PORT')
+# app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
+# app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
+# app.config['MAIL_USE_TLS'] = os.getenv('MAIL_USE_TLS')
+# app.config['MAIL_USE_SSL'] = os.getenv('MAIL_USE_SSL')
+# app.config['MAIL_DEFAULT_SENDER'] = os.getenv('MAIL_DEFAULT_SENDER')
 
 
 app.url_map.strict_slashes = False
@@ -41,13 +51,15 @@ cors = CORS(app, origins="0.0.0.0")
 cors = CORS(app, resources={r'/*': {'origins': host}})
 cors = CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 
-@jwt_required()
+
 @app.route("/")
 def home():
     access_token = Auth.create_token("Hello world")
     return jsonify({"access token": access_token}), 200
 
-
+# @jwt.expired_token_loader
+# def handle_expired_token_callback():
+#     return redirect('/api/v1/views/login')
 @app.before_request
 def check_content_type():
     if request.method in ["POST", "PUT", "PATCH", "DELETE"] and request.headers["Content-Type"] != "application/json":
