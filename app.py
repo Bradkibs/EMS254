@@ -14,8 +14,6 @@ from flask_jwt_extended import JWTManager
 from auth.auth import Authentication
 from api.v1.views import app_views
 
-
-
 Auth = Authentication()
 
 
