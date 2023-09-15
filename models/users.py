@@ -1,6 +1,6 @@
 from models.basemodel import BaseModel, Base
 from sqlalchemy import Column, String, DateTime, Boolean, Enum as SQLAlchemyEnum
-
+#from sqlalchemy.orm import relationship
 class User(BaseModel, Base):
     __tablename__ = 'users'
     email = Column(String(255), nullable=False, unique=True)
@@ -12,6 +12,8 @@ class User(BaseModel, Base):
     role = Column(SQLAlchemyEnum('admin', 'user', 'customer_service', name='user_role_enum'), default='user', nullable=False)
     is_active = Column(Boolean, default=False)
     last_login = Column(DateTime, nullable=False)
+
+    #accounts = relationship("Accounts", uselist=False, back_populates="user")
 
     def __init__(self, *args, **kwargs):
         """Initialize the user"""
