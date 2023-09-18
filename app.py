@@ -13,6 +13,9 @@ from dotenv import load_dotenv
 from flask_jwt_extended import JWTManager
 from auth.auth import Authentication
 from api.v1.views import app_views
+from db.storage import DB
+db = DB()
+db.reload()
 
 Auth = Authentication()
 

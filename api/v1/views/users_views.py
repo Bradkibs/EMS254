@@ -5,9 +5,11 @@ from datetime import datetime
 from api.v1.views import app_views
 #from auth.verify_user import generate_verification_token, send_verification_email
 from flask_jwt_extended import jwt_required
+from utils.user_account import AccountService
 
 user_auth = UserAuth()
 user_authenticator = Authentication()
+account_service = AccountService()
 
 @app_views.route('/register', methods=['POST'])
 def register_user():
@@ -42,10 +44,11 @@ def register_user():
         return jsonify({"message": "user already exists"}), 409
     else:
         usr = user_auth.create_user(email=email, password=password, first_name=first_name, last_name=last_name, phone_number=phone_number, location=location, is_active=is_active, last_login=last_login_str)
+        account = account_service.create_account(Total_funds=0, incomming_funds=0, outgoing_funds=0, user_id=usr.id)
         #verification_token = generate_verification_token()
         #mail_response = send_verification_email(user_email=email, verification_token=verification_token)
-
-        return jsonify({"message": "user created successfully", "user_id": str(usr.id)}), 201
+        account_deets = { 'account_number': account.account_number, 'Total_funds': account.Total_funds, 'incomming_funds': account.incomming_funds, 'outgoing_funds': account.outgoing_funds, 'user_id': account.user_id }
+        return jsonify({"message": "user created successfully", "user_id": str(usr.id), "account_message": "account created with the following credentials", 'account_details': account_deets}), 201
 
 
 #@app_views.route('/verify_email/<string: token>', methods=['GET'])
@@ -116,4 +119,3 @@ def get_user():
 @app_views.route('/logout', methods=['GET'])
 def logout():
     pass
-

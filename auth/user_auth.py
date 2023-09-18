@@ -1,4 +1,7 @@
 from models.users import User
+#from models.accounts import Accounts
+from models.messages import Messages
+from models.transactions import Transactions
 from uuid import uuid4
 from db.storage import DB
 from bcrypt import hashpw, gensalt, checkpw

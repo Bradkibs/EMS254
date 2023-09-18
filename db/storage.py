@@ -83,3 +83,11 @@ class DB:
     def close(self):
         """calls remove() method on the private session attr to close the session and stop using it"""
         self.__session.remove()
+
+    def begin(self):
+        """calls begin() method on the private session attr to start a transaction"""
+        self.__session.begin()
+
+    def rollback(self):
+        """calls rollback() method on the private session attr to roll back a transaction"""
+        self.__session.rollback()
