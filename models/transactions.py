@@ -22,5 +22,5 @@ class Transactions(BaseModel, Base):
     amount = Column(Float, nullable=False)
 
     # Define the sender and receiver relationships
-    sender = relationship('User', foreign_keys=[sender_id], backref='sent_transactions')
-    receiver = relationship('User', foreign_keys=[receiver_id], backref='received_transactions')
+    sender = relationship('User', foreign_keys=[sender_id], backref='sent_transaction')
+    receiver = relationship('User', foreign_keys=[receiver_id], backref='received_transaction')

@@ -13,5 +13,5 @@ class Messages(BaseModel, Base):
     receiver_id = Column(String(255), ForeignKey('users.id'), nullable=False)
 
     # Define the sender and receiver relationships
-    sender = relationship('User', foreign_keys=[sender_id], backref='sent_messages')
-    receiver = relationship('User', foreign_keys=[receiver_id], backref='received_messages')
+    sender = relationship('User', foreign_keys=[sender_id], backref='sent_message')
+    receiver = relationship('User', foreign_keys=[receiver_id], backref='received_message')

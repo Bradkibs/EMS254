@@ -23,7 +23,7 @@ class User(BaseModel, Base):
 
     # Define the relationship to the messages table
     sent_messages = relationship('Messages', foreign_keys='Messages.sender_id', backref='sender_user_messages', lazy=True)
-    received_messages = relationship('Messages', foreign_keys='Messages.receiver_id', backref='receiver_user_user_messages', lazy=True)
+    received_messages = relationship('Messages', foreign_keys='Messages.receiver_id', backref='receiver_user_messages', lazy=True)
 
     def __init__(self, *args, **kwargs):
         """Initialize the user"""
