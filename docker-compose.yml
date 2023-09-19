@@ -16,6 +16,26 @@ services:
     env_file:
       - .env
 
+  rabbitmq:
+    image: "rabbitmq:management"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
+
+#  flower:
+#    build: .
+#    command: flower -A app.celery
+#    ports:
+#      - "5555:5555"
+#    depends_on:
+#      - worker
+#    env_file:
+#      - .env
+
+
   postgres:
     image: postgres
     ports:
@@ -28,3 +48,13 @@ services:
       - POSTGRES_HOST=${PG_HOST}
       - POSTGRES_PASSWORD=${PG_PWD}
       - POSTGRES_DB=${PG_DB}
+
+  worker:
+    build: .
+    command: celery -A app.celery worker --loglevel=info
+    volumes:
+      - .:/celery_app
+    depends_on:
+      - rabbitmq
+    environment:
+      - CELERY_BROKER_URL=${CELERY_BROKER_URL}

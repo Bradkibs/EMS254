@@ -2,6 +2,8 @@ from models.accounts import Accounts
 from db.storage import DB
 import random
 from flask import jsonify
+from sqlalchemy.exc import SQLAlchemyError
+from app import celery
 
 
 
@@ -74,6 +76,7 @@ class AccountService:
     #     self.__db.save()
     #     return account
 
+    @celery.task
     def transact(self, amount, sender_id, receiver_id):
         """ creating a sql transaction"""
         if not amount and amount < 100:
@@ -89,13 +92,14 @@ class AccountService:
             if sender_account.Total_funds < amount:
                 return jsonify({"message": "Insufficient funds"}), 400
             try:
-                _db.begin()
+                self._db.begin()
                 sender_account.Total_funds -= amount
                 sender_account.outgoing_funds += amount
-                receiver_account.incoming_funds +=  amount
-                _db.save()
-            except Exception as e:
-                _db.rollback()
+                receiver_account.incoming_funds += amount
+                self._db.save()
+
+            except SQLAlchemyError as e:
+                self._db.rollback()
                 return jsonify({"message": "Transaction failed"}), 400
         else:
             return jsonify({"message": "The sender_account or receiver account does not exist"}), 400
