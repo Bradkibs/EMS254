@@ -18,12 +18,12 @@ class User(BaseModel, Base):
     accounts = relationship("Accounts", uselist=False, back_populates="user")
 
     # Define the relationship to the transactions table
-    sent_transactions = relationship('Transactions', foreign_keys='Transactions.sender_id', backref='sender', lazy=True)
-    received_transactions = relationship('Transactions', foreign_keys='Transactions.receiver_id', backref='receiver', lazy=True)
+    sent_transactions = relationship('Transactions', foreign_keys='Transactions.sender_id', backref='sender_user', lazy=True)
+    received_transactions = relationship('Transactions', foreign_keys='Transactions.receiver_id', backref='receiver_user', lazy=True)
 
     # Define the relationship to the messages table
-    sent_messages = relationship('Messages', foreign_keys='Messages.sender_id', backref='sender', lazy=True)
-    received_messages = relationship('Messages', foreign_keys='Messages.receiver_id', backref='receiver', lazy=True)
+    sent_messages = relationship('Messages', foreign_keys='Messages.sender_id', backref='sender_user_messages', lazy=True)
+    received_messages = relationship('Messages', foreign_keys='Messages.receiver_id', backref='receiver_user_user_messages', lazy=True)
 
     def __init__(self, *args, **kwargs):
         """Initialize the user"""

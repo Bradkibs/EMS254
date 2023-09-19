@@ -3,8 +3,6 @@ from db.storage import DB
 import random
 from flask import jsonify
 from sqlalchemy.exc import SQLAlchemyError
-from app import celery
-
 
 
 class AccountService:
@@ -76,7 +74,6 @@ class AccountService:
     #     self.__db.save()
     #     return account
 
-    @celery.task
     def transact(self, amount, sender_id, receiver_id):
         """ creating a sql transaction"""
         if not amount and amount < 100:
