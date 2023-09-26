@@ -1,12 +1,6 @@
 databases:
   - name: db
     postgresMajorVersion: 15
-    envVars:
-      - key: PG_ROOT_PASS
-      - key: PG_USER
-      - key: PG_PWD
-      - key: PG_DB
-      - key: PG_HOST
 
 services:
   - type: web
@@ -19,6 +13,31 @@ services:
       - key: APP_HOST
       - key: APP_PORT
       - key: JWT_SECRET_KEY
+      - key: PG_ROOT_PASS
+        fromService:
+          type: database
+          name: db
+          property: connectionString
+      - key: PG_USER
+        fromService:
+          type: database
+          name: db
+          property: connectionString
+      - key: PG_PWD
+        fromService:
+          type: database
+          name: db
+          property: connectionString
+      - key: PG_DB
+        fromService:
+          type: database
+          name: db
+          property: connectionString
+      - key: PG_HOST
+        fromService:
+          type: database
+          name: db
+          property: connectionString
       - key: CELERY_BROKER_URL
         fromService:
           type: redis
