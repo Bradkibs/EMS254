@@ -15,20 +15,21 @@ services:
     startCommand: python3 app.py
     healthCheckPath: /health
     envVars:
-     - key: APP_ENV
-     - key: APP_HOST
-     - key: APP_PORT
-     - key: JWT_SECRET_KEY
-     - key: CELERY_BROKER_URL
-    fromService:
+      - key: APP_ENV
+      - key: APP_HOST
+      - key: APP_PORT
+      - key: JWT_SECRET_KEY
+      - key: CELERY_BROKER_URL
+        fromService:
           type: redis
           name: celery-redis
           property: connectionString
-          ipAllowList:
-           - source: 127.0.0.1:5173
+        ipAllowList:
+          - source: 127.0.0.1:5173
     disk:
-        name: escrowapp
-        mountPath: /app
+      name: escrowapp
+      mountPath: /app
+
   - type: worker
     name: queue
     env: python
@@ -40,6 +41,7 @@ services:
           type: redis
           name: celery-redis
           property: connectionString
+
   - type: web
     name: flower
     plan: free
@@ -52,8 +54,9 @@ services:
           type: redis
           name: celery-redis
           property: connectionString
+
   - type: redis
     name: celery-redis
     plan: starter
     maxmemoryPolicy: noeviction # recommended policy for queues
-    ipAllowList: [ ]
+    ipAllowList: []
