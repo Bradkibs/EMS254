@@ -32,7 +32,7 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 #     broker=broker_url
 # )
 
-celery.conf.update(app.config, broker_connection_retry_on_startup=True)
+#celery.conf.update(app.config, broker_connection_retry_on_startup=True)
 # JWT config
 jwt = JWTManager(app)
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
