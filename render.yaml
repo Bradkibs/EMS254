@@ -7,9 +7,8 @@ services:
   - type: web
     name: app
     plan: free
-    runtime: python
+    runtime: docker
     dockerfilePath: ./Dockerfile
-    startCommand: python3 app.py
     healthCheckPath: /health
     envVars:
       - key: APP_ENV
