@@ -44,7 +44,3 @@ services:
           name: db
           property: connectionString
 
-    disk:
-      name: escrowapp
-      mountPath: /app
-
