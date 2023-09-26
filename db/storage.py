@@ -23,16 +23,16 @@ class DB:
         Constructor
         """
 
-        user = getenv('PG_USER')
-        password = getenv('PG_PWD')
-        host = getenv('PG_HOST')
-        db_name = getenv('PG_DB')
+        # user = getenv('PG_USER')
+        # password = getenv('PG_PWD')
+        # host = getenv('PG_HOST')
+        # db_name = getenv('PG_DB')
         env = getenv('APP_ENV')
-        # pg_url = 'postgresql://emsdb_d62s_user:hNq5rqYUe86eC4DodD8CO9wqAkSgysVA@dpg-ck9badmgtj9c73bmv5pg-a.oregon-postgres.render.com/emsdb_d62s'
+        pg_url = 'postgresql://db_eo9k_user:wZMq3kGvNpUmArnTbEfyOAeo1pQmAf86@dpg-ck9d8q70vg2c73fge0dg-a.oregon-postgres.render.com/db_eo9k'
         try:
-            self.__engine = create_engine(f'postgresql://{user}:{password}@{host}/{db_name}')
-            # self.__engine = create_engine(pg_url)
-            #self.reload()
+            # self.__engine = create_engine(f'postgresql://{user}:{password}@{host}/{db_name}')
+            self.__engine = create_engine(pg_url)
+            self.reload()
 
             if env == 'test':
                 Base.metadata.drop_all(self.__engine)

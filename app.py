@@ -7,6 +7,7 @@ from datetime import timedelta
 from flask import Flask, jsonify, make_response, request
 import os
 
+from flask_cors import CORS
 
 from db import storage
 from werkzeug.exceptions import HTTPException
@@ -71,6 +72,8 @@ else:
 # cors = CORS(app, origins="0.0.0.0")
 # cors = CORS(app, resources={r'/*': {'origins': host}})
 # cors = CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
+CORS(app_views, resources={r"/api/v1/views": {"origins": "http://localhost:5173"}},
+     supports_credentials=True)
 
 @app.route("/")
 def home():
@@ -82,6 +85,8 @@ def health():
 # @jwt.expired_token_loader
 # def handle_expired_token_callback():
 #     return redirect('/api/v1/views/login')
+
+
 @app.before_request
 def check_content_type():
     if request.method in ["POST", "PUT", "PATCH", "DELETE"] and request.headers["Content-Type"] != "application/json":
