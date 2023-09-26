@@ -142,6 +142,7 @@ def global_error_handler(err):
 @app.after_request
 def add_cors_headers(response):
     response.headers.extend({
+        'X-Content-Type-Options': 'nosniff',
         'Access-Control-Allow-Origin': 'http://localhost:5173',
         'Access-Control-Allow-Credentials': 'true',
         'Access-Control-Allow-Headers': 'Content-Type, Cache-Control, X-Requested-With, Authorization',
