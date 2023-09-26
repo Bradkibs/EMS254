@@ -4,8 +4,7 @@ Flask App sends and accept json api requests to the set frontend
 """
 from datetime import timedelta
 
-from flask import Flask, jsonify, make_response, request, redirect
-from flask_cors import CORS, cross_origin
+from flask import Flask, jsonify, make_response, request
 import os
 from db import storage
 from werkzeug.exceptions import HTTPException
@@ -38,6 +37,9 @@ celery.conf.update(app.config, broker_connection_retry_on_startup=True)
 jwt = JWTManager(app)
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(minutes=30)
+app.config['JWT_COOKIE_SECURE'] = True
+
+
 
 # Mail server config
 # app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER')
@@ -62,15 +64,16 @@ if environ == 'development':
 else:
     app.debug = False
 
-cors = CORS(app, origins="0.0.0.0")
-cors = CORS(app, resources={r'/*': {'origins': host}})
-cors = CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
-
+# cors = CORS(app, origins="0.0.0.0")
+# cors = CORS(app, resources={r'/*': {'origins': host}})
+# cors = CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 
 @app.route("/")
-def home():
-    access_token = Auth.create_token("Hello world")
-    return jsonify({"access token": access_token}), 200
+def health():
+    return jsonify({"Message": "Landing page display"}), 200
+@app.route("/health")
+def health():
+    return jsonify({"Message": "Healthy!"}), 200
 
 # @jwt.expired_token_loader
 # def handle_expired_token_callback():
@@ -135,6 +138,7 @@ def add_cors_headers(response):
         'Access-Control-Allow-Headers': 'Content-Type, Cache-Control, X-Requested-With, Authorization',
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, DELETE'
     })
+
     return response
 
 

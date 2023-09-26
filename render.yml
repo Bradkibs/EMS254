@@ -1,0 +1,60 @@
+databases:
+  - name: db
+   postgresMajorVersion: 15
+   envVars:
+      - key: PG_ROOT_PASS
+      - key: PG_USER
+      - key: PG_PWD
+      - key: PG_DB
+      - key: PG_HOST
+
+services:
+  - type: web
+    name: app
+    runtime: docker
+    startCommand: python3 app.py
+    healthCheckPath: /health
+    envVars:
+      - key: APP_ENV
+      - key: APP_HOST
+      - key: APP_PORT
+      - key: JWT_SECRET_KEY
+      - key: CELERY_BROKER_URL
+        fromService:
+          type: worker
+          name: queue
+        ipAllowList:
+        - source: 127.0.0.1:5173
+           description: react frontend
+      disk:
+        name: escrowapp
+        mountPath: /app
+
+  - type: worker
+    name: queue
+    env: python
+    startCommand: "celery -A app.celery worker --loglevel=info"
+    autoDeploy: True
+    envVars:
+      - key: CELERY_BROKER_URL
+        fromService:
+          name: celery-redis
+          type: redis
+          property: connectionString
+  - type: web
+    name: flower
+    plan: free
+    env: python
+    startCommand: "celery flower app.celery --loglevel=info"
+    autoDeploy: false
+    envVars:
+      - key: CELERY_BROKER_URL
+        fromService:
+          type: redis
+          name: celery-redis
+          property: connectionString
+  - type: redis
+    name: celery-redis
+    plan: starter
+    maxmemoryPolicy: noeviction # recommended policy for queues
+    ipAllowList: [ ]

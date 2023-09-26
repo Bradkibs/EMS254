@@ -1,4 +1,4 @@
-from flask import jsonify, request
+from flask import jsonify, request, url_for, redirect
 from auth.auth import Authentication
 from auth.user_auth import UserAuth
 from datetime import datetime
@@ -61,7 +61,7 @@ def login_user():
     """
     data = request.get_json()
     email = data.get('email')
-    phone_number = data.get('phone_number')
+    phone_number = data.get('phoneNumber')
     password = data.get('password')
 
     if not email and not phone_number:
@@ -116,6 +116,18 @@ def get_user():
     return jsonify(user_data), 200
 
 
-@app_views.route('/logout', methods=['GET'])
+@app_views.route('/logout', methods=['POST'])
 def logout():
-    pass
+    auth_header = request.headers.get('Authorization')
+
+    if auth_header and auth_header.startswith('Bearer '):
+        access_token = auth_header.split(' ')[1]
+
+        identity = user_authenticator.get_authenticated_user()
+        if identity and access_token:
+            response = jsonify({'message': 'Logged out successfully', 'status': 200})
+            user_authenticator.unset_cookie(response, access_token)
+
+            return jsonify({'message': 'Logged out successfully'}), 200
+        else:
+            return jsonify({'message': 'No access token found'}), 400
