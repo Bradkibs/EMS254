@@ -28,7 +28,7 @@ class DB:
         # host = getenv('PG_HOST')
         # db_name = getenv('PG_DB')
         env = getenv('APP_ENV')
-        pg_url = 'postgres://emsdb_d62s_user:hNq5rqYUe86eC4DodD8CO9wqAkSgysVA@dpg-ck9badmgtj9c73bmv5pg-a.oregon-postgres.render.com/emsdb_d62s'
+        pg_url = 'postgresql://emsdb_d62s_user:hNq5rqYUe86eC4DodD8CO9wqAkSgysVA@dpg-ck9badmgtj9c73bmv5pg-a.oregon-postgres.render.com/emsdb_d62s'
         try:
             # self.__engine = create_engine(f'postgresql://{user}:{password}@{host}/{db_name}')
             self.__engine = create_engine(pg_url)
