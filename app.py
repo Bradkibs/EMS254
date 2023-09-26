@@ -7,7 +7,7 @@ from datetime import timedelta
 from flask import Flask, jsonify, make_response, request
 import os
 
-from flask_cors import CORS
+# from flask_cors import CORS
 
 from db import storage
 from werkzeug.exceptions import HTTPException
