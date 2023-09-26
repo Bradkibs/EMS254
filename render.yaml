@@ -18,27 +18,26 @@ services:
       - key: JWT_SECRET_KEY
         value: 1a9b535f2a8c98284bbfeb9a28cff8ffbf883e41ab7c6cc0bd5444d5bdf2adc0
       - key: PG_ROOT_PASS
-        fromService:
-          type: database
+        fromDatabase:
           name: db
           property: connectionString
       - key: PG_USER
-        fromService:
+        fromDatabase:
           type: database
           name: db
           property: connectionString
       - key: PG_PWD
-        fromService:
+        fromDatabase:
           type: database
           name: db
           property: connectionString
       - key: PG_DB
-        fromService:
+        fromDatabase:
           type: database
           name: db
           property: connectionString
       - key: PG_HOST
-        fromService:
+        fromDatabase:
           type: database
           name: db
           property: connectionString
