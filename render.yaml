@@ -41,44 +41,8 @@ services:
           type: database
           name: db
           property: connectionString
-#      - key: CELERY_BROKER_URL
-#        fromService:
-#          type: redis
-#          name: celery-redis
-#          property: connectionString
-#        ipAllowList:
-#          - source: 127.0.0.1:5173
+
     disk:
       name: escrowapp
       mountPath: /app
 
-#  - type: worker
-#    name: queue
-#    env: python
-#    startCommand: "celery -A app.celery worker --loglevel=info"
-#    autoDeploy: True
-#    envVars:
-#      - key: CELERY_BROKER_URL
-#        fromService:
-#          type: redis
-#          name: celery-redis
-#          property: connectionString
-#
-#  - type: web
-#    name: flower
-#    plan: free
-#    env: python
-#    startCommand: "celery flower app.celery --loglevel=info"
-#    autoDeploy: false
-#    envVars:
-#      - key: CELERY_BROKER_URL
-#        fromService:
-#          type: redis
-#          name: celery-redis
-#          property: connectionString
-#
-#  - type: redis
-#    name: celery-redis
-#    plan: starter
-#    maxmemoryPolicy: noeviction # recommended policy for queues
-#    ipAllowList: []
