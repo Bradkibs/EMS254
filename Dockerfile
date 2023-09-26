@@ -19,13 +19,6 @@ EXPOSE 5000
 # Start the Flask web app
 CMD ["python3", "app.py"]
 
-FROM postgres:16
-
-# Set the environment variables for PostgreSQL
-ENV POSTGRES_USER $PG_USER
-ENV POSTGRES_PASSWORD $PG_PWD
-ENV POSTGRES_DB $PG_DB
-ENV PGDATA /var/lib/postgresql/data/pgdata
 
 
 
