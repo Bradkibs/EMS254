@@ -6,6 +6,9 @@ from datetime import timedelta
 
 from flask import Flask, jsonify, make_response, request
 import os
+
+from flask_cors import CORS
+
 from db import storage
 from werkzeug.exceptions import HTTPException
 from dotenv import load_dotenv
@@ -38,6 +41,8 @@ jwt = JWTManager(app)
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(minutes=30)
 app.config['JWT_COOKIE_SECURE'] = True
+app.config['JWT_COOKIE_CSRF_PROTECT'] = True
+CORS(app, supports_credentials=True)
 
 
 
