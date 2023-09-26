@@ -141,9 +141,9 @@ def global_error_handler(err):
 
 @app.after_request
 def add_cors_headers(response):
-    frontend_url ="https://74bc-41-90-70-217.ngrok-free.app/"
+    frontend_url = "http://localhost:5173"
     response.headers.extend({
-        'X-Content-Type-Options': 'nosniff',
+        'X-Content-Type-Options': 'no-sniff',
         'Access-Control-Allow-Origin': frontend_url,
         'Access-Control-Allow-Credentials': 'true',
         'Access-Control-Allow-Headers': 'Content-Type, Cache-Control, X-Requested-With, Authorization',
