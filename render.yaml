@@ -1,10 +1,12 @@
 databases:
   - name: db
     postgresMajorVersion: 15
+    plan: free
 
 services:
   - type: web
     name: app
+    plan: free
     runtime: python
     startCommand: python3 app.py
     healthCheckPath: /health

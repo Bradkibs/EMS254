@@ -7,7 +7,6 @@ from datetime import timedelta
 from flask import Flask, jsonify, make_response, request
 import os
 
-from flask_cors import CORS
 
 from db import storage
 from werkzeug.exceptions import HTTPException
@@ -16,7 +15,7 @@ from flask_jwt_extended import JWTManager
 from auth.auth import Authentication
 from api.v1.views import app_views
 from db.storage import DB
-from celery import Celery
+# from celery import Celery
 
 db = DB()
 db.reload()
@@ -42,7 +41,7 @@ app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(minutes=30)
 app.config['JWT_COOKIE_SECURE'] = True
 app.config['JWT_COOKIE_CSRF_PROTECT'] = True
-CORS(app, supports_credentials=True)
+
 
 
 
