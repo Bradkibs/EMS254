@@ -26,11 +26,11 @@ load_dotenv()
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-broker_url = os.getenv('CELERY_BROKER_URL')
-celery = Celery(
-    app.import_name,
-    broker=broker_url
-)
+# broker_url = os.getenv('CELERY_BROKER_URL')
+# celery = Celery(
+#     app.import_name,
+#     broker=broker_url
+# )
 
 celery.conf.update(app.config, broker_connection_retry_on_startup=True)
 # JWT config
