@@ -15,10 +15,10 @@ services:
     startCommand: python3 app.py
     healthCheckPath: /health
     envVars:
-      - key: APP_ENV
-      - key: APP_HOST
-      - key: APP_PORT
-      - key: JWT_SECRET_KEY
+#      - key: APP_ENV
+#      - key: APP_HOST
+#      - key: APP_PORT
+#      - key: JWT_SECRET_KEY
       - key: CELERY_BROKER_URL
         fromService:
           type: redis
