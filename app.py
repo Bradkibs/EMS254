@@ -72,8 +72,8 @@ else:
 # cors = CORS(app, origins="0.0.0.0")
 # cors = CORS(app, resources={r'/*': {'origins': host}})
 # cors = CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
-CORS(app_views, resources={r"/api/v1/views": {"origins": "http://localhost:5173"}},
-     supports_credentials=True)
+# CORS(app_views, resources={r"/api/v1/views": {"origins": "http://localhost:5173"}},
+#      supports_credentials=True)
 
 @app.route("/")
 def home():
@@ -142,7 +142,7 @@ def global_error_handler(err):
 @app.after_request
 def add_cors_headers(response):
     response.headers.extend({
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': 'http://localhost:5173',
         'Access-Control-Allow-Credentials': 'true',
         'Access-Control-Allow-Headers': 'Content-Type, Cache-Control, X-Requested-With, Authorization',
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, DELETE'
