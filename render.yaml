@@ -5,14 +5,18 @@ databases:
 services:
   - type: web
     name: app
-    runtime: docker
+    runtime: python
     startCommand: python3 app.py
     healthCheckPath: /health
     envVars:
       - key: APP_ENV
+        value: development
       - key: APP_HOST
+        value: 0.0.0.0
       - key: APP_PORT
+        value: 5000
       - key: JWT_SECRET_KEY
+        value: 1a9b535f2a8c98284bbfeb9a28cff8ffbf883e41ab7c6cc0bd5444d5bdf2adc0
       - key: PG_ROOT_PASS
         fromService:
           type: database
