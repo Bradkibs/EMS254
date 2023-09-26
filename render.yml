@@ -25,7 +25,7 @@ services:
           name: queue
         ipAllowList:
         - source: 127.0.0.1:5173
-           description: react frontend
+           description: frontend
       disk:
         name: escrowapp
         mountPath: /app
