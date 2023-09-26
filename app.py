@@ -141,7 +141,7 @@ def global_error_handler(err):
 
 @app.after_request
 def add_cors_headers(response):
-    frontend_url = "https://74bc-41-90-70-217.ngrok-free.app/"
+    frontend_url = "https://74bc-41-90-70-217.ngrok-free.app"
     response.headers.extend({
         'X-Content-Type-Options': 'no-sniff',
         'Access-Control-Allow-Origin': frontend_url,
