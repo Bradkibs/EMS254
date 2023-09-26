@@ -69,7 +69,7 @@ else:
 # cors = CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 
 @app.route("/")
-def health():
+def home():
     return jsonify({"Message": "Landing page display"}), 200
 @app.route("/health")
 def health():
