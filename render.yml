@@ -1,7 +1,7 @@
 databases:
   - name: db
-   postgresMajorVersion: 15
-   envVars:
+    postgresMajorVersion: 15
+    envVars:
       - key: PG_ROOT_PASS
       - key: PG_USER
       - key: PG_PWD
@@ -29,7 +29,6 @@ services:
       disk:
         name: escrowapp
         mountPath: /app
-
   - type: worker
     name: queue
     env: python
