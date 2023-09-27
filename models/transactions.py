@@ -21,6 +21,9 @@ class Transactions(BaseModel, Base):
     # Amount of the transaction
     amount = Column(Float, nullable=False)
 
+    # transaction status
+    status = Column(String(255), nullable=False, default='pending')
+
     # Define the sender and receiver relationships
-    sender = relationship('User', foreign_keys=[sender_id], backref='sent_transaction')
-    receiver = relationship('User', foreign_keys=[receiver_id], backref='received_transaction')
+    sender = relationship('User', foreign_keys=[sender_id], back_populates='sent_transactions')
+    receiver = relationship('User', foreign_keys=[receiver_id], back_populates='received_transactions')

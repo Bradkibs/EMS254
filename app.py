@@ -71,11 +71,13 @@ if environ == 'development':
 else:
     app.debug = False
 
+
 # cors = CORS(app, origins="0.0.0.0")
 # cors = CORS(app, resources={r'/*': {'origins': host}})
 # cors = CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 # CORS(app_views, resources={r"/api/v1/views": {"origins": "http://localhost:5173"}},
 #      supports_credentials=True)
+
 
 @app.route("/")
 def home():
@@ -143,7 +145,7 @@ def global_error_handler(err):
 
 @app.after_request
 def add_cors_headers(response):
-    frontend_url = "https://74bc-41-90-70-217.ngrok-free.app"
+    frontend_url = "http://localhost:5173"
     response.headers.extend({
         'X-Content-Type-Options': 'no-sniff',
         'Access-Control-Allow-Origin': frontend_url,
@@ -152,7 +154,9 @@ def add_cors_headers(response):
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, DELETE'
     })
 
+
     return response
+
 
 
 def setup_global_errors():

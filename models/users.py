@@ -1,4 +1,5 @@
 from models.basemodel import BaseModel, Base
+from models.transactions import Transactions
 from sqlalchemy import Column, String, DateTime, Boolean, Enum as SQLAlchemyEnum
 from sqlalchemy.orm import relationship
 
@@ -18,12 +19,12 @@ class User(BaseModel, Base):
     accounts = relationship("Accounts", uselist=False, back_populates="user")
 
     # Define the relationship to the transactions table
-    sent_transactions = relationship('Transactions', foreign_keys='Transactions.sender_id', backref='sender_user', lazy=True)
-    received_transactions = relationship('Transactions', foreign_keys='Transactions.receiver_id', backref='receiver_user', lazy=True)
+    sent_transactions = relationship('Transactions', foreign_keys=[Transactions.sender_id], back_populates='sender')
+    received_transactions = relationship('Transactions', foreign_keys=[Transactions.receiver_id], back_populates='receiver')
 
     # Define the relationship to the messages table
-    sent_messages = relationship('Messages', foreign_keys='Messages.sender_id', backref='sender_user_messages', lazy=True)
-    received_messages = relationship('Messages', foreign_keys='Messages.receiver_id', backref='receiver_user_messages', lazy=True)
+    sent_messages = relationship('Messages', foreign_keys='Messages.sender_id', back_populates='sender')
+    received_messages = relationship('Messages', foreign_keys='Messages.receiver_id', back_populates='receiver')
 
     def __init__(self, *args, **kwargs):
         """Initialize the user"""

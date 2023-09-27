@@ -15,6 +15,11 @@ class AccountService:
         account_number = str(random.randint(10*9, 10**10-1))
         return account_number
 
+    def get_user_id_from_account_number(self, account_number):
+        """Get user id from account number"""
+        account = self.__db.query(Accounts).filter_by(account_number=account_number).first()
+        return account.user_id
+
     def create_account(self, **kwargs):
         """Create account"""
         account_number = self.create_account_number()
@@ -36,6 +41,11 @@ class AccountService:
         """Get account"""
         account = self.__db.query(Accounts).filter_by(account_number=account_number).first()
         return account
+
+    def get_account_by_user_id(self, user_id):
+        """get account numebr by user id"""
+        account = self.__db.query(Accounts).filter_by(user_id=user_id).first()
+        return account.account_number
 
     def add_total_funds(self, account_number, amount):
         """Add total funds"""
