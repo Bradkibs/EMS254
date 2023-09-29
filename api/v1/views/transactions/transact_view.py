@@ -1,17 +1,18 @@
-from api.v1.views import app_views
+from api.v1.views.transactions import user_trans
 
 from flask import jsonify, request
 from flask_jwt_extended import jwt_required
 
 from utils.user_account import AccountService
-from utils.TransactionServices import TransactionService
+from utils.TransactionServices import TransactionServices
 from auth.auth import Authentication
 
+
 account_service = AccountService()
-transaction_service = TransactionService()
+transaction_service = TransactionServices()
 user_authenticator = Authentication()
 
-@app_views.route('/transactions', methods=['POST'])
+@user_trans.route('/transact', methods=['POST'])
 @jwt_required
 def create_transaction():
     sender_id = user_authenticator.get_authenticated_user()
@@ -33,12 +34,11 @@ def create_transaction():
     return jsonify({'message': 'transaction created successfully', 'transaction': transaction.serialize()}), 201
 
 
-"""we dont need a specific transaction but have implemented for testing purposes"""
-@app_views.route('/transactions/<int:transaction_id>', methods=['GET'])
-@jwt_required
-def get_transaction(transaction_id):
-    transaction = transaction_service.get_transaction(transaction_id)
-    if not transaction:
-        return jsonify({'message': 'transaction not found'}), 404
-    return jsonify({'message': 'transaction found', 'transaction': transaction.serialize()}), 200
-
+# """we dont need a specific transaction but have implemented for testing purposes"""
+# @user_trans.route('/transaction/<int:transaction_id>', methods=['GET'])
+# @jwt_required
+# def get_transaction(transaction_id):
+#     transaction = transaction_service.get_transaction(transaction_id)
+#     if not transaction:
+#         return jsonify({'message': 'transaction not found'}), 404
+#     return jsonify({'message': 'transaction found', 'transaction': transaction.serialize()}), 200

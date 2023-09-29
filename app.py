@@ -14,8 +14,10 @@ from werkzeug.exceptions import HTTPException
 from dotenv import load_dotenv
 from flask_jwt_extended import JWTManager
 from auth.auth import Authentication
-from api.v1.views import app_views
+from api.v1.views.user import app_views
+from api.v1.views.transactions import user_trans
 from db.storage import DB
+
 # from celery import Celery
 
 db = DB()
@@ -61,6 +63,7 @@ app.config['JWT_COOKIE_SAMESITE'] = "None"
 app.url_map.strict_slashes = False
 
 app.register_blueprint(app_views)
+app.register_blueprint(user_trans)
 
 host = os.getenv("APP_HOST", "0.0.0.0")
 port = os.getenv("APP_PORT", 5000)

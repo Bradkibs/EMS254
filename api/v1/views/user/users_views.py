@@ -2,7 +2,7 @@ from flask import jsonify, request, url_for, redirect
 from auth.auth import Authentication
 from auth.user_auth import UserAuth
 from datetime import datetime
-from api.v1.views import app_views
+from api.v1.views.user import app_views
 #from auth.verify_user import generate_verification_token, send_verification_email
 from flask_jwt_extended import jwt_required
 from utils.user_account import AccountService
