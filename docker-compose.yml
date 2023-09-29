@@ -14,7 +14,7 @@ services:
     depends_on:
       - postgres
     env_file:
-      - /home/EMS254/.env
+      - .env
 
   rabbitmq:
     image: "rabbitmq:management"
