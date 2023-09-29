@@ -18,7 +18,7 @@ from api.v1.views.user import app_views
 from api.v1.views.transactions import user_trans
 from db.storage import DB
 
-# from celery import Celery
+from celery import Celery
 
 db = DB()
 db.reload()
