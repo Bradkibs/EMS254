@@ -18,7 +18,7 @@ from api.v1.views.user import app_views
 from api.v1.views.transactions import user_trans
 from db.storage import DB
 
-# from celery import Celery
+from celery import Celery
 
 db = DB()
 db.reload()
@@ -31,13 +31,13 @@ load_dotenv()
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-# broker_url = os.getenv('CELERY_BROKER_URL')
-# celery = Celery(
-#     app.import_name,
-#     broker=broker_url
-# )
+broker_url = os.getenv('CELERY_BROKER_URL')
+celery = Celery(
+    app.import_name,
+    broker=broker_url
+)
 
-#celery.conf.update(app.config, broker_connection_retry_on_startup=True)
+celery.conf.update(app.config, broker_connection_retry_on_startup=True)
 # JWT config
 jwt = JWTManager(app)
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
