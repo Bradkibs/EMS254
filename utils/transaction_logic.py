@@ -25,3 +25,20 @@ class TransactionService:
         """View user specific transactions"""
         transactions = self.__db.query(Transactions).filter_by(sender_id=user_id).all()
         return transactions
+
+    def approve_transaction(self, transaction_id):
+        """Approve transaction"""
+        transaction = self.get_transaction(transaction_id)
+        transaction.status = 'approved'
+        self.__db.save()
+
+    def decline_transaction(self, transaction_id):
+        """Decline transaction"""
+        transaction = self.get_transaction(transaction_id)
+        transaction.status = 'declined'
+        self.__db.save()
+
+    def get_all_transactions(self, user_id):
+        """Get all transactions"""
+        transactions = self.__db.query(Transactions).filter_by(sender_id=user_id).all()
+        return transactions

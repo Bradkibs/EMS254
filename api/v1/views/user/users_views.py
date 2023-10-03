@@ -87,7 +87,7 @@ def login_user():
             return jsonify({"message": "invalid password"}), 400
         else:
             access_token = user_authenticator.create_token(user.id)
-            response = jsonify({"message": "Logged in successfully!", "status": 200})
+            response = jsonify({"message": "Logged in successfully!", "status": 200, "access_token": access_token})
             user_authenticator.set_cookie(response, access_token)
             return response
 

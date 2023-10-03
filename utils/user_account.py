@@ -1,4 +1,5 @@
 from models.accounts import Accounts
+from models.transactions import Transactions
 from db.storage import DB
 import random
 from flask import jsonify
@@ -54,36 +55,6 @@ class AccountService:
         self.__db.save()
         return account
 
-    # def add_incomming_funds(self, account_number, amount):
-    #     """Add incomming funds to the incomming funds"""
-    #     account = self.__db.query(Accounts).filter_by(account_number=account_number).first()
-    #     account.incomming_funds += amount
-    #     self.__db.save()
-    #     return account
-
-    # def add_outgoing_funds(self, account_number, amount):
-    #     """Add outgoing funds to the outgoing funds"""
-    #     account = self.__db.query(Accounts).filter_by(account_number=account_number).first()
-    #     account.outgoing_funds += amount
-    #     self.__db.save()
-    #     return account
-
-    # def subtract_outgoing_funds(self, account_number, amount):
-    #     """Subtract outgoing funds from total funds"""
-    #     account = self.__db.query(Accounts).filter_by(account_number=account_number).first()
-    #     account.total -= amount
-    #     account.outgoing_funds = amount
-    #     self.__db.save()
-    #     return account
-
-    # def add_incoming_funds_to_total(self, account_number):
-    #     """Add incoming funds to total funds"""
-    #     account = self.__db.query(Accounts).filter_by(account_number=account_number).first()
-    #     account.total += account.incoming_funds
-    #     account.incoming_funds = 0
-    #     self.__db.save()
-    #     return account
-
     def transact(self, amount, sender_id, receiver_id):
         """ creating a sql transaction"""
         if not amount and amount < 100:
@@ -112,3 +83,53 @@ class AccountService:
             return jsonify({"message": "The sender_account or receiver account does not exist"}), 400
 
         return jsonify({"message": "Transaction successful"}), 200
+
+    def reverse_money(self, amount, sender_id, receiver_id):
+        sender_account = self.__db.query(Accounts).filter_by(user_id=sender_id).first()
+        receiver_account = self._db.query(Accounts).filter_by(user_id=receiver_id).first()
+        if sender_account and receiver_account:
+            try:
+                self._db.begin()
+                sender_account.outgoing_funds -= amount
+                sender_account.Total_funds += amount
+                receiver_account.incoming_funds -= amount
+                self.__db.save()
+
+            except SQLAlchemyError as e:
+                self.__db.rollback()
+                return jsonify({"message": "reversal failed"})
+        else:
+            return jsonify({"message": "the sender or the receiver does not exist"}), 400
+        return jsonify({"message": "amount successfully reversed"})
+
+
+    def send_money(self, amount, sender_id, receiver_id):
+
+        sender_account = self.__db.query(Accounts).filter_by(user_id=sender_id).first()
+        receiver_account = self._db.query(Accounts).filter_by(user_id=receiver_id).first()
+        if sender_account and receiver_account:
+            try:
+                self._db.begin()
+                sender_account.outgoing_funds -= amount
+                receiver_account.Total_funds += amount
+                receiver_account.incoming_funds -= amount
+                self.__db.save()
+
+            except SQLAlchemyError as e:
+                self.__db.rollback()
+                return jsonify({"message": "approval failed"})
+        else:
+            return jsonify({"message": "the sender or the receiver does not exist"}), 400
+        return jsonify({"message": "amount successfully sent"})
+
+
+    def create_conflict(self, transaction_id):
+        # take the transaction id
+        transaction = self.__db.query(Transactions).filter_by(id=transaction_id).first()
+        if transaction:
+            # if the transaction exixts set the status of that transaction to true
+            transaction.conflict = "True"
+            self.__db.save()
+        else:
+            return jsonify({"message": "such a transaction does not exist"})
+        return jsonify({"message": "money locked until conflict is resolved"})

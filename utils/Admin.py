@@ -2,6 +2,7 @@ from models.accounts import Accounts
 from models.transactions import Transactions
 from models.users import User
 from db.storage import DB
+from flask import jsonify
 
 class Admin:
 
@@ -24,3 +25,16 @@ class Admin:
         for admin purposes"""
         users = self.__db.query(User).all()
         return users
+
+    def resolve_conflicts(self, transaction_id):
+        transaction = self.__db.query(Transactions).filter_by(id=transaction_id).first()
+        if transaction:
+            transaction.conflict = "False"
+            self.__db.save()
+        else:
+            return jsonify({"message": "Transaction not found"})
+        return jsonify({"message": "conflict resolved by admin"})
+
+
+    # admin has the right to return the money
+    # sender completes transaction and sends the monet

@@ -24,6 +24,8 @@ class Transactions(BaseModel, Base):
     # transaction status
     status = Column(String(255), nullable=False, default='pending')
 
+    conflict = Column(String(255), nullable=False, default='False')
+
     # Define the sender and receiver relationships
     sender = relationship('User', foreign_keys=[sender_id], back_populates='sent_transactions')
     receiver = relationship('User', foreign_keys=[receiver_id], back_populates='received_transactions')
